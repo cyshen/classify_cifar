@@ -1,0 +1,24 @@
+from PIL import Image
+import numpy as np
+import sys
+import cifar10_2eval as cf
+
+
+filename=sys.argv[1]
+im = Image.open("./stickers2/"+filename)
+print(im.mode)
+if im.mode!='RGB' :
+	im=im.convert('RGB')
+im = (np.array(im))
+print im.size
+
+r = im[:,:,0].flatten()
+g = im[:,:,1].flatten()
+b = im[:,:,2].flatten()
+label = [1]
+
+outname=filename[0:-4]+'.bin'
+out = np.array(list(label) + list(r) + list(g) + list(b),np.uint8)
+out.tofile("./test_inputdata/"+outname)
+
+cf.evaluate(outname)
